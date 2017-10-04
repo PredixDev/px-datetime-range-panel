@@ -21,12 +21,8 @@
 @import "px-shadows-design/_objects.shadows.scss";
 
 // Component
-:host[hidden] {
-  visibility: hidden;
-}
 
 .rangepicker__box {
-  position: absolute;
   padding: calculateRem(10px) calculateRem(20px) calculateRem(20px) calculateRem(20px);
   border: 1px solid;
   z-index: var(--px-range-panel-z-index, 30);
