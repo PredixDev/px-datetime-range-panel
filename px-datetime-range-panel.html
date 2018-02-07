@@ -495,11 +495,12 @@ Custom property | Description
     },
 
     _areConsecutiveMonth: function(fromBaseDate, toBaseDate) {
-      if(fromBaseDate && toBaseDate) {
-        return fromBaseDate.isSame(toBaseDate.clone().subtract(1, 'months'), 'month');
-      } else {
+      // if(fromBaseDate && toBaseDate) {
+      //   return fromBaseDate.isSame(toBaseDate.clone().subtract(1, 'months'), 'month');
+      // } else {
+      //   return false;
+      // }
         return false;
-      }
     },
 
     _fromBaseDateChanged: function() {
