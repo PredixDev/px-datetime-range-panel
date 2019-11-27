@@ -26,75 +26,101 @@ limitations under the License.
   <script src="../webcomponentsjs/webcomponents-lite.min.js"></script>
   <!-- Import custom element. Note: see comment about relative paths to dependencies in the *.html file referenced below -->
 
-  <link rel="import" href="../px-theme/px-theme-styles.html">
-  <style include="px-theme-styles" is="custom-style"></style>
+  <script type="module" src="../px-theme/px-theme-styles.js"></script>
+  <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<style include="px-theme-styles" is="custom-style"></style>`;
+document.head.appendChild($_documentContainer.content);
+</script>
 
-  <link rel="import" href="px-datetime-range-panel.html" />
+  <script type="module" src="./px-datetime-range-panel.js"></script>
 
-  <style>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<style>
     .properties {
       margin-top: 400px;
     }
-  </style>
+  </style>`;
+
+document.head.appendChild($_documentContainer.content);
+</script>
 </head>
 
 <body>
 
-  <h3>Demo</h3>
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+$_documentContainer.innerHTML = `<h3>Demo</h3>`;
+document.body.appendChild($_documentContainer.content);
+</script>
 
-  <template id="just-for-demo" is="dom-bind">
-    <px-datetime-range-panel id="panel" hide-time="{{hideTime}}" hide-presets="{{hidePresets}}" show-buttons="{{showButtons}}" time-format="{{timeFormat}}" block-future-dates="{{blockFutureDates}}" block-past-dates="{{blockPastDates}}" range="{{range}}" is-valid="{{isValidd}}"
-        time-zone="{{timeZone}}">
+  <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<template id="just-for-demo" is="dom-bind">
+    <px-datetime-range-panel id="panel" hide-time="{{hideTime}}" hide-presets="{{hidePresets}}" show-buttons="{{showButtons}}" time-format="{{timeFormat}}" block-future-dates="{{blockFutureDates}}" block-past-dates="{{blockPastDates}}" range="{{range}}" is-valid="{{isValidd}}" time-zone="{{timeZone}}">
     </px-datetime-range-panel>
     <div class="properties">
       <h3>Properties</h3>
       <div>Hide time:
-        <input type="checkbox" checked="{{hideTime::change}}"></input>
+        <input type="checkbox" checked="{{hideTime::change}}">
       </div>
       <div>Hide presets:
-        <input type="checkbox" checked="{{hidePresets::change}}"></input>
+        <input type="checkbox" checked="{{hidePresets::change}}">
       </div>
       <div>Show buttons:
-        <input id="showButtons" type="checkbox" checked="{{showButtons::change}}"></input>
+        <input id="showButtons" type="checkbox" checked="{{showButtons::change}}">
       </div>
       <div>Block future dates
-        <input type="checkbox" checked="{{blockFutureDates::change}}"></input>
+        <input type="checkbox" checked="{{blockFutureDates::change}}">
       </div>
       <div>Block past dates
-        <input type="checkbox" checked="{{blockPastDates::change}}"></input>
+        <input type="checkbox" checked="{{blockPastDates::change}}">
       </div>
       <div>Time format:
-        <input id="timeFormat" type="text" value="{{timeFormat::input}}"></input>
+        <input id="timeFormat" type="text" value="{{timeFormat::input}}">
       </div>
       <div>Time zone:
-        <input id="timeZone" type="text" value="{{timeZone::input}}"></input>
+        <input id="timeZone" type="text" value="{{timeZone::input}}">
       </div>
       <div>presets:
         <textarea id="textArea" value="{{presetRanges::input}}" style="width:350px; height:230px"></textarea>
       </div>
       <h3>Readonly Properties</h3>
       <div>Is Valid:
-        <input type="checkbox" disabled checked="{{isValidd::change}}"></input>
+        <input type="checkbox" disabled="" checked="{{isValidd::change}}">
       </div>
     </div>
-  </template>
-  <script>
-    document.addEventListener('WebComponentsReady', function() {
-      var panel = document.getElementById('panel'),
-        textArea = document.getElementById('textArea'),
-        timeFormat = document.getElementById('timeFormat'),
-        showButtons = document.getElementById('showButtons');
+  </template>`;
 
-      textArea.addEventListener('input', function() {
-        panel.presetRanges = JSON.parse(textArea.value);
-      });
+document.body.appendChild($_documentContainer.content);
+</script>
+  <script type="module">
+import 'px-theme/px-theme-styles.js';
+import './px-datetime-range-panel.js';
+var panel = document.getElementById('panel'),
+  textArea = document.getElementById('textArea'),
+  timeFormat = document.getElementById('timeFormat'),
+  showButtons = document.getElementById('showButtons');
 
-      textArea.value = JSON.stringify(panel.presetRanges, null, 4);
-      showButtons.checked = panel.showButtons;
-      timeFormat.value = panel.timeFormat;
+textArea.addEventListener('input', function() {
+  panel.presetRanges = JSON.parse(textArea.value);
+});
 
-    });
-  </script>
+textArea.value = JSON.stringify(panel.presetRanges, null, 4);
+showButtons.checked = panel.showButtons;
+timeFormat.value = panel.timeFormat;
+</script>
 </body>
 
 </html>
